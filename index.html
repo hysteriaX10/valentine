@@ -39,17 +39,16 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
-    height: 100px; 
+    height: 100px;
     margin-top: 20px;
   }
 
   button {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     padding: 14px 22px;
     border-radius: 12px;
     border: none;
     cursor: pointer;
-    touch-action: manipulation;
     transition: all 0.2s ease;
   }
 
@@ -64,10 +63,6 @@
     background: #ddd;
     flex: 1;
     margin-left: 10px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
   }
 
   .heart {
@@ -106,48 +101,14 @@
 </div>
 
 <script>
-const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
-const buttons = document.getElementById("buttons");
+const noBtn = document.getElementById("noBtn");
 const card = document.getElementById("card");
 
-let count = 0;
-const messages = [
-  "No 😢",
-  "Are you sure?",
-  "Really sure?",
-  "Think again 🥺",
-  "Last chance 💔",
-  "Okay… wow 😭"
-];
+// Initial button sizes (in pixels)
+let yesSize = 16;
+let noSize = 16;
 
-// Move No button and grow Yes button only when No is clicked
-noBtn.addEventListener("click", () => {
-  count++;
-
-  const area = buttons.getBoundingClientRect();
-  const maxX = area.width - noBtn.offsetWidth;
-  const maxY = area.height - noBtn.offsetHeight;
-
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
-
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-
-  if (count < messages.length) {
-    noBtn.innerText = messages[count];
-  }
-
-  // Grow Yes button
-  let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-  yesBtn.style.fontSize = (currentSize + 2) + "px";
-
-  // Add floating heart
-  createHeart();
-});
-
-// Floating hearts
 function createHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
@@ -158,16 +119,34 @@ function createHeart() {
   setTimeout(() => heart.remove(), 2000);
 }
 
-// Yes button click - show final love message
+// Clicking No: Yes grows, No shrinks, No moves randomly, floating heart
+noBtn.addEventListener("click", () => {
+  // Grow Yes
+  yesSize += 2;
+  yesBtn.style.fontSize = yesSize + "px";
+
+  // Shrink No
+  noSize = Math.max(6, noSize - 2); // minimum size 6px so it doesn't disappear
+  noBtn.style.fontSize = noSize + "px";
+
+  // Move No slightly horizontally
+  const offset = (Math.random() * 40) - 20; // -20px to +20px
+  noBtn.style.transform = `translateX(${offset}px)`;
+
+  // Create a heart
+  createHeart();
+});
+
+// Clicking Yes: Show final love message + marriage date
 yesBtn.addEventListener("click", () => {
   card.innerHTML = `
     <h1>YAY!!! 💕🥰</h1>
-    <p class="love-msg">Ghoinear, you are my everything 💖</p>
+    <p class="love-msg">Mrs. Kanchan, you are my everything 💖</p>
     <p class="love-msg">See you on 13th Dec ❤️</p>
     <img class="surprise-img" src="https://i.imgur.com/4AiXzf8.jpeg" alt="Surprise!">
   `;
 
-  // Extra floating hearts for effect
+  // Extra hearts for magic
   for (let i = 0; i < 20; i++) {
     setTimeout(createHeart, i * 150);
   }
@@ -175,4 +154,3 @@ yesBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
-
