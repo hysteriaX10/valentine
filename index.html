@@ -160,9 +160,9 @@
   </div>
 </div>
 
-<!-- Background music -->
+<!-- Soft background music -->
 <audio id="bgMusic" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/download/audio/2022/02/16/audio_1c7fbe1c27.mp3?filename=soft-harp-chime-loop-1102.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
@@ -231,14 +231,20 @@ setInterval(createBackgroundHeart, 300);
 setInterval(createSparkle, 200);
 setInterval(createSoftHeart, 400);
 
-// Function to start music on first click
-function startMusic() {
-  if (music.paused) music.play();
+// Function to start music on first interaction
+function playMusic() {
+  if (music.paused) {
+    music.volume = 0.2;  // soft volume
+    music.play().catch(()=>{});
+  }
 }
+
+// Trigger music on any tap/click
+document.body.addEventListener('click', playMusic, { once: true });
+document.body.addEventListener('touchstart', playMusic, { once: true });
 
 // Clicking No
 noBtn.addEventListener("click", () => {
-  startMusic(); // start music on first interaction
   // Grow Yes
   yesSize += YES_GROW;
   yesBtn.style.fontSize = yesSize + "px";
@@ -256,9 +262,8 @@ noBtn.addEventListener("click", () => {
   createHeart();
 });
 
-// Clicking Yes
+// Clicking Yes: final love message
 yesBtn.addEventListener("click", () => {
-  startMusic(); // start music on first interaction
   card.innerHTML = `
     <h1>YAY!!! 💕🥰</h1>
     <p class="love-msg">Wify ❤️ you are my everything. 😘</p>
