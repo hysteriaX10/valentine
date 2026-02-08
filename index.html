@@ -50,19 +50,18 @@
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: absolute;
   }
 
   #yesBtn {
     background: #ff4d6d;
     color: white;
-    flex: 1;
-    margin-right: 10px;
+    left: 10px;
   }
 
   #noBtn {
     background: #ddd;
-    flex: 1;
-    margin-left: 10px;
+    right: 10px;
   }
 
   .heart {
@@ -99,13 +98,13 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const card = document.getElementById("card");
 
-// Initial button sizes
+// Initial font sizes
 let yesSize = 16;
 let noSize = 16;
 
-// Adjust growth/shrink speed here
-const YES_GROW = 5; // increase Yes by 5px per click
-const NO_SHRINK = 4; // shrink No by 4px per click
+// Growth/Shrink speed (double speed)
+const YES_GROW = 10; // px per click
+const NO_SHRINK = 8; // px per click
 
 function createHeart() {
   const heart = document.createElement("div");
@@ -117,7 +116,7 @@ function createHeart() {
   setTimeout(() => heart.remove(), 2000);
 }
 
-// Clicking No: Yes grows faster, No shrinks faster, No moves slightly
+// Clicking No: Yes grows, No shrinks, No moves randomly in X and Y
 noBtn.addEventListener("click", () => {
   // Grow Yes
   yesSize += YES_GROW;
@@ -127,11 +126,19 @@ noBtn.addEventListener("click", () => {
   noSize = Math.max(6, noSize - NO_SHRINK);
   noBtn.style.fontSize = noSize + "px";
 
-  // Move No slightly horizontally
-  const offset = (Math.random() * 40) - 20; // -20px to +20px
-  noBtn.style.transform = `translateX(${offset}px)`;
+  // Random move within card boundaries
+  const cardRect = card.getBoundingClientRect();
+  const noRect = noBtn.getBoundingClientRect();
+  const maxX = cardRect.width - noRect.width;
+  const maxY = cardRect.height - noRect.height;
 
-  // Create heart
+  const randX = Math.random() * maxX;
+  const randY = Math.random() * maxY;
+
+  noBtn.style.left = randX + "px";
+  noBtn.style.top = randY + "px";
+
+  // Floating heart
   createHeart();
 });
 
