@@ -103,6 +103,10 @@ const card = document.getElementById("card");
 let yesSize = 16;
 let noSize = 16;
 
+// Adjust growth/shrink speed here
+const YES_GROW = 5; // increase Yes by 5px per click
+const NO_SHRINK = 4; // shrink No by 4px per click
+
 function createHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
@@ -113,17 +117,21 @@ function createHeart() {
   setTimeout(() => heart.remove(), 2000);
 }
 
-// Clicking No: Yes grows, No shrinks, No moves slightly
+// Clicking No: Yes grows faster, No shrinks faster, No moves slightly
 noBtn.addEventListener("click", () => {
-  yesSize += 2;
+  // Grow Yes
+  yesSize += YES_GROW;
   yesBtn.style.fontSize = yesSize + "px";
 
-  noSize = Math.max(6, noSize - 2);
+  // Shrink No
+  noSize = Math.max(6, noSize - NO_SHRINK);
   noBtn.style.fontSize = noSize + "px";
 
-  const offset = (Math.random() * 40) - 20;
+  // Move No slightly horizontally
+  const offset = (Math.random() * 40) - 20; // -20px to +20px
   noBtn.style.transform = `translateX(${offset}px)`;
 
+  // Create heart
   createHeart();
 });
 
@@ -135,7 +143,7 @@ yesBtn.addEventListener("click", () => {
     <p class="love-msg">See You On 13th Dec</p>
   `;
 
-  // Extra floating hearts
+  // Extra hearts
   for (let i = 0; i < 20; i++) {
     setTimeout(createHeart, i * 150);
   }
